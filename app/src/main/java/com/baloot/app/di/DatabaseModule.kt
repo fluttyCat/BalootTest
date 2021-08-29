@@ -3,7 +3,7 @@ package com.baloot.app.di
 import android.app.Application
 import androidx.room.Room
 import com.core.dao.UserInfoDao
-import com.core.db.PnashrDb
+import com.core.db.MyTestDb
 import com.core.repository.LocalRepository
 import com.core.repository.LocalRepositoryImpl
 import com.core.utils.*
@@ -16,9 +16,9 @@ class DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideDb(app: Application): PnashrDb {
+    fun provideDb(app: Application): MyTestDb {
         return Room
-            .databaseBuilder(app, PnashrDb::class.java, "cache.db")
+            .databaseBuilder(app, MyTestDb::class.java, "cache.db")
             .fallbackToDestructiveMigration()
             .build()
     }
@@ -26,7 +26,7 @@ class DatabaseModule {
 
     @Singleton
     @Provides
-    fun provideUserInfoDao(db: PnashrDb): UserInfoDao{
+    fun provideUserInfoDao(db: MyTestDb): UserInfoDao{
         return db.userInfoDao()
     }
 

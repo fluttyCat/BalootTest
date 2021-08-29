@@ -9,8 +9,8 @@ import com.baloot.app.di.DaggerAppComponent
 import com.baloot.app.ui.splash.viewModel.SplashViewModel
 import com.baloot.app.ui.splash.viewModel.SplashViewModelImpl
 import com.core.base.ParentFragment
+import com.core.repository.HomeRepository
 import com.core.repository.LocalRepository
-import com.core.repository.LoginRepository
 import javax.inject.Inject
 
 
@@ -20,7 +20,7 @@ class SplashFragment : ParentFragment<SplashViewModel, FragmentSplashBinding>() 
     lateinit var localRepository: LocalRepository
 
     @Inject
-    lateinit var loginRepository: LoginRepository
+    lateinit var homeRepository: HomeRepository
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -37,7 +37,7 @@ class SplashFragment : ParentFragment<SplashViewModel, FragmentSplashBinding>() 
                 return SplashViewModelImpl(
                     application = requireActivity().application,
                     localRepository = localRepository,
-                    loginRepository = loginRepository
+                    homeRepository = homeRepository
                 ) as T
             }
         }

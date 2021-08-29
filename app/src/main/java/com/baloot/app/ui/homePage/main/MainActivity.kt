@@ -13,8 +13,8 @@ import com.baloot.app.di.DaggerAppComponent
 import com.baloot.app.ui.homePage.main.viewModel.MainViewModel
 import com.baloot.app.ui.homePage.main.viewModel.MainViewModelImpl
 import com.core.base.ParentActivity
+import com.core.repository.HomeRepository
 import com.core.repository.LocalRepository
-import com.core.repository.LoginRepository
 import javax.inject.Inject
 
 class MainActivity : ParentActivity<MainViewModel, ActivityMainBinding>() {
@@ -23,7 +23,7 @@ class MainActivity : ParentActivity<MainViewModel, ActivityMainBinding>() {
     lateinit var localRepository: LocalRepository
 
     @Inject
-    lateinit var loginRepository: LoginRepository
+    lateinit var homeRepository: HomeRepository
 
     private lateinit var navController: NavController
 
@@ -47,7 +47,7 @@ class MainActivity : ParentActivity<MainViewModel, ActivityMainBinding>() {
                 return MainViewModelImpl(
                     application = application,
                     localRepository = localRepository,
-                    loginRepository = loginRepository
+                    homeRepository = homeRepository
                 ) as T
             }
         }

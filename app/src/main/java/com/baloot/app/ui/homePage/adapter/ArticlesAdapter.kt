@@ -8,10 +8,6 @@ import com.baloot.app.databinding.ItemArticlePreviewBinding
 import com.core.base.adapter.BaseHolder
 import com.core.dto.article.ArticleDto
 
-/* parisa;
-coding and smoking!!
-* */
-
 class ArticlesAdapter(private val itemClickCallback: (ArticleDto) -> Unit) :
     PagingDataAdapter<ArticleDto, BaseHolder<ArticleDto>>(object :
         DiffUtil.ItemCallback<ArticleDto>() {

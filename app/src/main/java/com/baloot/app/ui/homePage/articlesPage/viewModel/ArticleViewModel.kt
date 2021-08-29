@@ -12,4 +12,5 @@ import kotlinx.coroutines.flow.Flow
 abstract class ArticleViewModel(application: Application) : BaseViewModel(application) {
 
     abstract fun getArticleData(): Flow<PagingData<ArticleDto>>
+
 }

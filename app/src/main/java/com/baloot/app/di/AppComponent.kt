@@ -1,6 +1,7 @@
 package com.baloot.app.di
 
 import android.app.Application
+import com.baloot.app.ui.homePage.articleDetails.ArticlesDetailFragment
 import com.baloot.app.ui.homePage.articlesPage.ArticlesFragment
 import com.baloot.app.ui.homePage.main.MainActivity
 import com.baloot.app.ui.splashPage.splashActivity.SplashActivity
@@ -24,6 +25,7 @@ interface AppComponent {
     //Fragment
     fun inject(app: SplashFragment)
     fun inject(app: ArticlesFragment)
+    fun inject(app: ArticlesDetailFragment)
 
     @Component.Builder
     interface Builder {

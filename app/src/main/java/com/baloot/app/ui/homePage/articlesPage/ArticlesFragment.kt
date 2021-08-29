@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.baloot.app.R
@@ -18,7 +19,6 @@ import com.baloot.app.util.FooterAdapterVertical
 import com.core.base.ParentFragment
 import com.core.repository.HomeRepository
 import com.core.repository.LocalRepository
-import es.dmoral.toasty.Toasty
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -34,12 +34,13 @@ class ArticlesFragment : ParentFragment<ArticleViewModel, FragmentArticlesBindin
 
     private val articlesAdapter: ArticlesAdapter by lazy {
         ArticlesAdapter {
-            Toasty.success(
-                requireContext(),
-                "adapter test with paging ${it.title}",
-                Toast.LENGTH_SHORT,
-                true
-            ).show()
+            navigateToDetailFragment(
+                it.title!!,
+                it.description!!,
+                it.publishedAt!!,
+                it.urlToImage!!,
+                it.source!!.name
+            )
         }
     }
 
@@ -91,6 +92,24 @@ class ArticlesFragment : ParentFragment<ArticleViewModel, FragmentArticlesBindin
         }
     }
 
+    private fun navigateToDetailFragment(
+        title: String,
+        desc: String,
+        publishedAt: String,
+        imageUrl: String,
+        source: String
+    ) {
+        val action =
+            ArticlesFragmentDirections.actionArticlesFragmentToArticlesDetailFragment(
+                title = title,
+                description = desc,
+                published = publishedAt,
+                url = imageUrl,
+                source = source
+            )
+
+        findNavController().navigate(action)
+    }
 
     override fun getViewModelClass(): Class<ArticleViewModel> = ArticleViewModel::class.java
 

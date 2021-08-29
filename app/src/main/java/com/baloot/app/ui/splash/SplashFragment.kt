@@ -1,23 +1,20 @@
-package com.baloot.app.ui.profile
+package com.baloot.app.ui.splash
 
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.baloot.app.R
+import com.baloot.app.databinding.FragmentSplashBinding
+import com.baloot.app.di.DaggerAppComponent
+import com.baloot.app.ui.splash.viewModel.SplashViewModel
+import com.baloot.app.ui.splash.viewModel.SplashViewModelImpl
 import com.core.base.ParentFragment
 import com.core.repository.LocalRepository
 import com.core.repository.LoginRepository
-import com.baloot.app.R
-import com.baloot.app.databinding.FragmentProfileBinding
-import com.baloot.app.di.DaggerAppComponent
-import com.baloot.app.ui.profile.viewModel.ProfileViewModel
-import com.baloot.app.ui.profile.viewModel.ProfileViewModelImpl
 import javax.inject.Inject
 
-/**
- * Created by aMiir on 9/26/20
- * Drunk, Fix Later
- */
-class ProfileFragment  : ParentFragment<ProfileViewModel, FragmentProfileBinding>(){
+
+class SplashFragment : ParentFragment<SplashViewModel, FragmentSplashBinding>() {
 
     @Inject
     lateinit var localRepository: LocalRepository
@@ -28,17 +25,16 @@ class ProfileFragment  : ParentFragment<ProfileViewModel, FragmentProfileBinding
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        viewModel.requestSecond("a")
 
     }
 
-    override fun getViewModelClass(): Class<ProfileViewModel> = ProfileViewModel::class.java
+    override fun getViewModelClass(): Class<SplashViewModel> = SplashViewModel::class.java
 
     override fun getFactory(): ViewModelProvider.Factory {
         return object : ViewModelProvider.NewInstanceFactory() {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
-                return ProfileViewModelImpl(
+                return SplashViewModelImpl(
                     application = requireActivity().application,
                     localRepository = localRepository,
                     loginRepository = loginRepository
@@ -47,7 +43,7 @@ class ProfileFragment  : ParentFragment<ProfileViewModel, FragmentProfileBinding
         }
     }
 
-    override fun getResourceLayoutId(): Int =  R.layout.fragment_profile
+    override fun getResourceLayoutId(): Int = R.layout.fragment_splash
 
     override fun inject() {
         DaggerAppComponent.builder()

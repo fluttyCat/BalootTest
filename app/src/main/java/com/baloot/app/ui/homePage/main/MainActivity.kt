@@ -1,4 +1,4 @@
-package com.baloot.app.ui.main
+package com.baloot.app.ui.homePage.main
 
 import android.os.Bundle
 import android.widget.Toast
@@ -7,17 +7,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.core.base.ParentActivity
-import com.core.repository.LocalRepository
-import com.core.repository.LoginRepository
 import com.baloot.app.R
 import com.baloot.app.databinding.ActivityMainBinding
 import com.baloot.app.di.DaggerAppComponent
-import com.baloot.app.ui.main.viewModel.MainViewModel
-import com.baloot.app.ui.main.viewModel.MainViewModelImpl
+import com.baloot.app.ui.homePage.main.viewModel.MainViewModel
+import com.baloot.app.ui.homePage.main.viewModel.MainViewModelImpl
+import com.core.base.ParentActivity
+import com.core.repository.LocalRepository
+import com.core.repository.LoginRepository
 import javax.inject.Inject
 
-class MainActivity  : ParentActivity<MainViewModel, ActivityMainBinding>() {
+class MainActivity : ParentActivity<MainViewModel, ActivityMainBinding>() {
 
     @Inject
     lateinit var localRepository: LocalRepository

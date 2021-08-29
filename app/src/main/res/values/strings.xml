@@ -2,4 +2,7 @@
     <string name="app_name">Baloot</string>
     <string name="bottom_nav_item_profile">Profile</string>
     <string name="bottom_nav_item_article">Article</string>
+    <string name="profile_text">پروفایل کاربر</string>
+    <string name="button_text">gitHub</string>
+    <string name="button_text_about_me">about Me</string>
 </resources>

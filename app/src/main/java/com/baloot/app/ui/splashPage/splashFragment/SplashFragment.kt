@@ -1,16 +1,21 @@
-package com.baloot.app.ui.splash
+package com.baloot.app.ui.splashPage.splashFragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.baloot.app.R
 import com.baloot.app.databinding.FragmentSplashBinding
 import com.baloot.app.di.DaggerAppComponent
-import com.baloot.app.ui.splash.viewModel.SplashViewModel
-import com.baloot.app.ui.splash.viewModel.SplashViewModelImpl
+import com.baloot.app.ui.homePage.main.MainActivity
+import com.baloot.app.ui.splashPage.splashFragment.viewModel.SplashViewModel
+import com.baloot.app.ui.splashPage.splashFragment.viewModel.SplashViewModelImpl
 import com.core.base.ParentFragment
 import com.core.repository.HomeRepository
 import com.core.repository.LocalRepository
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -25,7 +30,19 @@ class SplashFragment : ParentFragment<SplashViewModel, FragmentSplashBinding>() 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        navigateToHomeActivity()
 
+    }
+
+    private fun navigateToHomeActivity() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            delay(5000)
+            val intentToHome =
+                Intent(requireActivity(), MainActivity::class.java).apply {
+                    startActivity(this)
+                }
+
+        }
     }
 
     override fun getViewModelClass(): Class<SplashViewModel> = SplashViewModel::class.java

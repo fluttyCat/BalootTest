@@ -2,16 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/splashFragment">
-    <fragment
-        android:id="@+id/splashFragment"
-        android:name="com.baloot.app.ui.splash.SplashFragment"
-        android:label="SplashFragment"
-        tools:layout="@layout/fragment_splash" >
-        <action
-            android:id="@+id/action_splashFragment_to_articlesFragment"
-            app:destination="@id/articlesFragment" />
-    </fragment>
+    app:startDestination="@id/articlesFragment">
     <fragment
         android:id="@+id/articlesFragment"
         android:name="com.baloot.app.ui.homePage.articlesPage.ArticlesFragment"

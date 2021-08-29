@@ -1,4 +1,4 @@
-package com.baloot.app.ui.splash.viewModel
+package com.baloot.app.ui.splashPage.splashFragment.viewModel
 
 import android.app.Application
 import androidx.lifecycle.LiveData

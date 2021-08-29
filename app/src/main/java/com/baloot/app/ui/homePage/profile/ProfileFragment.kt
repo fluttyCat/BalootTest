@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.baloot.app.R
 import com.baloot.app.databinding.FragmentProfileBinding
 import com.baloot.app.di.DaggerAppComponent
+import com.baloot.app.ui.homePage.profile.bottomSheet.BottomSheetDialogFragment
 import com.baloot.app.ui.homePage.profile.viewModel.ProfileViewModel
 import com.baloot.app.ui.homePage.profile.viewModel.ProfileViewModelImpl
 import com.core.base.ParentFragment
@@ -26,6 +27,7 @@ class ProfileFragment : ParentFragment<ProfileViewModel, FragmentProfileBinding>
     @Inject
     lateinit var homeRepository: HomeRepository
 
+    lateinit var bottomSheet: BottomSheetDialogFragment
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -42,7 +44,15 @@ class ProfileFragment : ParentFragment<ProfileViewModel, FragmentProfileBinding>
     }
 
     private fun openAboutMeBottomSheet() {
+        bottomSheet =
+            BottomSheetDialogFragment {
 
+            }
+        bottomSheet.isCancelable = true
+        bottomSheet.show(
+            requireActivity().supportFragmentManager,
+            "bottomSheet"
+        )
     }
 
     override fun getViewModelClass(): Class<ProfileViewModel> = ProfileViewModel::class.java

@@ -23,9 +23,9 @@ class ConnectivityInterceptor @Inject constructor(
         val original = chain.request()
 
         val requestBuilder = original.newBuilder()
-            .addHeader("Accept", "application/json")
-            .addHeader("Content-type", "application/json")
-            .addHeader("apiKey", "de196ac120164019a0911ea8191f85e4")
+           /* .addHeader("Accept", "application/json")
+            .addHeader("Content-type", "application/json")*/
+            .addHeader("x-Api-key", "de196ac120164019a0911ea8191f85e4")
 
 
         return chain.proceed(requestBuilder.build())

@@ -46,6 +46,9 @@ dependencies {
     /**
      * Android Support Library
      * */
+    /**
+     * Android Support Library
+     * */
     api deps.kotlin
     api deps.appCompat
     api deps.material
@@ -89,6 +92,32 @@ dependencies {
     api deps.retrofit_con
     api deps.retrofit_rx
     api deps.okhttp_interceptor
+
+
+    /**
+     * Dagger V2
+     * */
+    api deps.dagger
+    api deps.dagger_support
+    api deps.legacy_support
+    kapt deps.dagger_Kapt
+
+    /**
+     * Loader
+     */
+    api deps.mkloader
+
+    /*Glide*/
+    api deps.glide
+    api deps.glide_okhttp
+    kapt deps.glide_kapt
+
+    /* Picasso*/
+    api deps.picasso
+
+    /*circular image view*/
+    api deps.circularImageView
+
 
 
     /**

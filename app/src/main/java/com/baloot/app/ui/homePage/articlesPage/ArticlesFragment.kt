@@ -68,15 +68,18 @@ class ArticlesFragment : ParentFragment<ArticleViewModel, FragmentArticlesBindin
         articlesAdapter.addLoadStateListener {
             when (it.refresh) {
                 is LoadState.NotLoading -> {
-
+                    dataBinding.progressBar.visibility = View.INVISIBLE
                     dataBinding.articleRv.visibility = View.VISIBLE
                 }
                 is LoadState.Loading -> {
 
                     dataBinding.articleRv.visibility = View.INVISIBLE
+                    dataBinding.progressBar.visibility = View.VISIBLE
                 }
                 is LoadState.Error -> {
                     val state = it.refresh as LoadState.Error
+
+                    dataBinding.progressBar.visibility = View.INVISIBLE
 
                     Toast.makeText(
                         requireActivity(),

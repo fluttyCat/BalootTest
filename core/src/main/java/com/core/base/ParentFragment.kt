@@ -24,19 +24,39 @@ abstract class ParentFragment<T : BaseViewModel, E : ViewDataBinding> : BaseFrag
 
     abstract fun getFactory(): ViewModelProvider.Factory
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
         viewModel = ViewModelProvider(this, getFactory()).get(getViewModelClass())
 
 
-        viewModel.getNetworkStatus().observe(this, Observer {
+        viewModel.getNetworkStatus().observe(this, Observer { it ->
             when (it.status) {
                 Status.RUNNING -> showProgress(it.tag ?: "")
                 Status.SUCCESS -> hideProgress(it.tag ?: "")
-                else -> showError(it.tag ?: "", it.msg ?: getString(it.event))
+                else -> {
+                    showError(
+                        it.tag ?: "",
+                        it.msg ?: getString(it.event),
+                        it.code,
+                        it.errorBody
+                    )
+
+                }
             }
+
+            it.tag?.takeIf { string ->
+                string.contains("_getRefreshToken")
+            }?.let {
+                return@Observer
+            }
+
         })
+
+
+
         viewModel.getLocationState().observe(this, Observer {
             locationState(it)
         })
@@ -54,19 +74,31 @@ abstract class ParentFragment<T : BaseViewModel, E : ViewDataBinding> : BaseFrag
         })
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        dataBinding = DataBindingUtil.inflate(LayoutInflater.from(context), getResourceLayoutId(), container, false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        dataBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(context),
+            getResourceLayoutId(),
+            container,
+            false
+        )
         lifecycle.addObserver(viewModel)
         viewModel.onCreated()
         return dataBinding.root
     }
 
-    open fun locationState(state : LocationState){ }
+    open fun locationState(state: LocationState) {}
 
-    open fun locationUpdate(location : Coordinate){ }
+    open fun locationUpdate(location: Coordinate) {}
 
-    private fun requestStartUpdatingLocation(requestEnableSetting : Boolean? = true) {
-        viewModel.requestStartUpdatingLocation(WeakReference(requireActivity()), requestEnableSetting)
+    private fun requestStartUpdatingLocation(requestEnableSetting: Boolean? = true) {
+        viewModel.requestStartUpdatingLocation(
+            WeakReference(requireActivity()),
+            requestEnableSetting
+        )
     }
 
     private fun requestStopUpdatingLocation() {

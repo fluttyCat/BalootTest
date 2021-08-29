@@ -8,7 +8,5 @@ import com.core.dto.login.LoginResultDto
 
 abstract class ArticleViewModel(application: Application) : BaseViewModel(application) {
 
-    abstract fun getSecondResponse(): LiveData<LoginResultDto<String>>
 
-    abstract fun requestSecond(promoterId: String)
 }

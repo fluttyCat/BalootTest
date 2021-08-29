@@ -9,17 +9,19 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.core.dto.ErrorResultDto
 
 
 abstract class BaseFragment : Fragment() {
 
-    val permissionRequest : Int = 12000
+    val permissionRequest: Int = 12000
 
     var granted: PermissionGranted? = null
 
     var denied: PermissionDenied? = null
 
     abstract fun getResourceLayoutId(): Int
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,11 +50,19 @@ abstract class BaseFragment : Fragment() {
         return true
     }
 
-    open fun permissionsRequest(permissions: Array<String>, granted: PermissionGranted, denied: PermissionDenied) {
+    open fun permissionsRequest(
+        permissions: Array<String>,
+        granted: PermissionGranted,
+        denied: PermissionDenied
+    ) {
         var hasPermission: Boolean = true
         val deniedPermissions = mutableListOf<String>()
         for (permission in permissions) {
-            if (ContextCompat.checkSelfPermission(context!!, permission) == PackageManager.PERMISSION_DENIED) {
+            if (ContextCompat.checkSelfPermission(
+                    context!!,
+                    permission
+                ) == PackageManager.PERMISSION_DENIED
+            ) {
                 hasPermission = false
                 deniedPermissions.add(permission)
             }
@@ -77,16 +87,22 @@ abstract class BaseFragment : Fragment() {
 
     open fun backStack(tag: String) {}
 
-    open fun showError(tag: String, error: String) {}
+    open fun showError(tag: String?, error: String?, code: Int?, errorBody: ErrorResultDto?) {}
 
-    open fun inject(){}
+    //open fun refreshToken(code: Int?) {}
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    open fun inject() {}
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == permissionRequest) {
-            if (permissions.size == grantResults.size){
+            if (permissions.size == grantResults.size) {
                 granted!!(arrayOf(*permissions))
-            }else{
+            } else {
                 denied!!(arrayOf(*permissions))
             }
         }

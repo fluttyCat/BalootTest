@@ -8,8 +8,6 @@ import com.core.dto.Coordinate
 import com.core.dto.NetworkState
 import com.core.utils.LocationHelper
 import com.core.utils.LocationHelperImpl
-
-
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Observable
@@ -32,7 +30,8 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
 
     open fun getLocationState(): MutableLiveData<LocationState> = locationHelper.getLocationState()
     open fun onLocationUpdate(): MutableLiveData<Coordinate> = locationHelper.onLocationUpdate()
-    open fun locationPermissionRequired(): MutableLiveData<ArrayList<String>> = locationHelper.locationPermissionRequired()
+    open fun locationPermissionRequired(): MutableLiveData<ArrayList<String>> =
+        locationHelper.locationPermissionRequired()
 
     open fun getNetworkStatus(): LiveData<NetworkState> = networkState
 
@@ -59,11 +58,17 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
 
     open fun showingError(error: String) {
         networkState.postValue(NetworkState.error(msg = error))
+
     }
 
     open fun showingError(error: Int) {
         networkState.postValue(NetworkState.error(event = error))
     }
+
+    open fun showingErrorCode(code: Int) {
+        networkState.postValue(NetworkState.error(code = code))
+    }
+
 
     open fun hideProgress() {
         networkState.postValue(NetworkState.loading())

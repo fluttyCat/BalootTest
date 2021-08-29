@@ -4,10 +4,6 @@ import android.app.Application
 import com.baloot.app.di.DaggerAppComponent
 import io.reactivex.plugins.RxJavaPlugins
 
-/**
- * Created by aMiir on 9/26/20
- * Drunk, Fix Later
- */
 class App : Application() {
 
     private fun handleUncaughtExceptionHandler(e: Throwable) {

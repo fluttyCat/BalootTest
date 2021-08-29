@@ -6,10 +6,10 @@ import com.core.base.BaseRepository
 import com.core.dao.UserInfoDao
 import com.core.dto.login.UserInfoDto
 
-abstract class LocalRepository : BaseRepository() {
-    abstract fun insertUserInfo(userInfoDto: UserInfoDto) : LiveData<Boolean>
-    abstract fun getUserInfo() :LiveData<UserInfoDto>
-    abstract fun deleteUser() :LiveData<Boolean>
+abstract class LocalRepository : BaseRepository {
+    abstract fun insertUserInfo(userInfoDto: UserInfoDto): LiveData<Boolean>
+    abstract fun getUserInfo(): LiveData<UserInfoDto>
+    abstract fun deleteUser(): LiveData<Boolean>
 }
 
 class LocalRepositoryImpl(

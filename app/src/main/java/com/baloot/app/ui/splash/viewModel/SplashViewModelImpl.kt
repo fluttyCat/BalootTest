@@ -18,17 +18,11 @@ class SplashViewModelImpl(
     application
 ) {
 
-    private val second: MutableLiveData<String> = MutableLiveData()
 
-    private val appListRepo = Transformations.map(second) {
-        loginRepository.appList(it)
-    }
 
     override fun getNetworkStatus(): LiveData<NetworkState> =
         MediatorLiveData<NetworkState>().apply {
-            this.addSource(Transformations.switchMap(appListRepo) { it.networkState }) {
-                this.postValue(it)
-            }
+
         }
 
 

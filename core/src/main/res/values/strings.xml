@@ -1,0 +1,23 @@
+<resources>
+
+
+    <string name="forbidden">Forbidden</string>
+    <string name="eofException">End of file Exception</string>
+    <string name="ioException">IO exception</string>
+    <string name="sqLiteException">SQLite exception</string>
+    <string name="authorization">authorization</string>
+    <string name="runtimeException">runtime exception</string>
+    <string name="jsonFormat">json format exception</string>
+    <string name="undefine">undefine</string>
+
+    <string name="space">\u0020</string>
+    <string name="save">Save</string>
+
+
+    <string name="error_no_permission">You do not have the necessary authorization to create a voice message.</string>
+    <string name="generic_error">An unknown error has occurred, please try again later</string>
+
+    <string name="record_pause">  Pause</string>
+    <string name="record_replace">  Replace</string>
+
+</resources>

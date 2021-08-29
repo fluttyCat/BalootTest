@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Baloot</string>
+    <string name="bottom_nav_item_profile">Profile</string>
+</resources>

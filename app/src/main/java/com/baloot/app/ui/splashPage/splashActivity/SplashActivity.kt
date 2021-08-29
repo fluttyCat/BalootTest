@@ -1,4 +1,4 @@
-package com.baloot.app.ui.main
+package com.baloot.app.ui.splashPage.splashActivity
 
 import android.os.Bundle
 import android.widget.Toast
@@ -7,23 +7,23 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import com.core.base.ParentActivity
-import com.core.repository.LocalRepository
-import com.core.repository.LoginRepository
 import com.baloot.app.R
 import com.baloot.app.databinding.ActivityMainBinding
 import com.baloot.app.di.DaggerAppComponent
-import com.baloot.app.ui.main.viewModel.MainViewModel
-import com.baloot.app.ui.main.viewModel.MainViewModelImpl
+import com.baloot.app.ui.splashPage.splashActivity.viewModel.SplashViewModel
+import com.baloot.app.ui.splashPage.splashActivity.viewModel.SplashViewModelImpl
+import com.core.base.ParentActivity
+import com.core.repository.HomeRepository
+import com.core.repository.LocalRepository
 import javax.inject.Inject
 
-class MainActivity  : ParentActivity<MainViewModel, ActivityMainBinding>() {
+class SplashActivity : ParentActivity<SplashViewModel, ActivityMainBinding>() {
 
     @Inject
     lateinit var localRepository: LocalRepository
 
     @Inject
-    lateinit var loginRepository: LoginRepository
+    lateinit var homeRepository: HomeRepository
 
     private lateinit var navController: NavController
 
@@ -31,11 +31,10 @@ class MainActivity  : ParentActivity<MainViewModel, ActivityMainBinding>() {
         super.onCreate(savedInstanceState)
 
         val host: NavHostFragment = supportFragmentManager
-            .findFragmentById(R.id.navHost) as NavHostFragment? ?: return
+            .findFragmentById(R.id.splashNavHost) as NavHostFragment? ?: return
 
         navController = host.navController
 
-        dataBinding.bottomNavigation.setupWithNavController(navController)
 
     }
 
@@ -44,10 +43,10 @@ class MainActivity  : ParentActivity<MainViewModel, ActivityMainBinding>() {
         return object : ViewModelProvider.NewInstanceFactory() {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
-                return MainViewModelImpl(
+                return SplashViewModelImpl(
                     application = application,
                     localRepository = localRepository,
-                    loginRepository = loginRepository
+                    homeRepository = homeRepository
                 ) as T
             }
         }
@@ -60,9 +59,9 @@ class MainActivity  : ParentActivity<MainViewModel, ActivityMainBinding>() {
             .inject(this)
     }
 
-    override fun getResourceLayoutId(): Int = R.layout.activity_main
+    override fun getResourceLayoutId(): Int = R.layout.activity_splash
 
-    override fun getViewModelClass(): Class<MainViewModel> = MainViewModel::class.java
+    override fun getViewModelClass(): Class<SplashViewModel> = SplashViewModel::class.java
 
     override fun showProgress(tag: String) {
         super.showProgress(tag)
@@ -75,7 +74,7 @@ class MainActivity  : ParentActivity<MainViewModel, ActivityMainBinding>() {
 
     override fun showError(tag: String, error: String) {
         super.showError(tag, error)
-        Toast.makeText(this@MainActivity, error, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@SplashActivity, error, Toast.LENGTH_SHORT).show()
     }
 
 }

@@ -17,18 +17,6 @@ import javax.inject.Named
 import javax.inject.Singleton
 
 
-/*
-* Network layer :
-* connectivity
-* http
-* retrofit : x
-* retrofit : y
-* api 1 : base x.com
-* api 2 : base y.com
-* repository api 1
-* repository api 2
-* */
-
 @Module
 class NetworkModule {
 
@@ -64,7 +52,7 @@ class NetworkModule {
     @Named("retrofit_login")
     fun provideRetrofitLogin(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://lead.koosha.ir/")
+            .baseUrl("https://newsapi.org/v2/")
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .client(client)
@@ -73,14 +61,14 @@ class NetworkModule {
 
     @Singleton
     @Provides
-    fun provideLoginApi(@Named("retrofit_login") retrofit: Retrofit): LoginApi {
-        return retrofit.create(LoginApi::class.java)
+    fun provideLoginApi(@Named("retrofit_login") retrofit: Retrofit): HomeApi {
+        return retrofit.create(HomeApi::class.java)
     }
 
     @Singleton
     @Provides
-    fun provideLoginRepository(loginApi: LoginApi): LoginRepository {
-        return LoginRepositoryImpl(loginApi)
+    fun provideLoginRepository(homeApi: HomeApi): HomeRepository {
+        return HomeRepositoryImpl(homeApi)
     }
 
 }

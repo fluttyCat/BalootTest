@@ -12,8 +12,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
 
+        <activity android:name="com.baloot.app.ui.homePage.main.MainActivity">
+
+        </activity>
         <activity
-            android:name="com.baloot.app.ui.main.MainActivity"
+            android:name=".ui.splashPage.splashActivity.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

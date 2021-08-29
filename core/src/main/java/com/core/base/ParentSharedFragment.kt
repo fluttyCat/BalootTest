@@ -31,7 +31,12 @@ abstract class ParentSharedFragment<T : BaseViewModel, E : ViewDataBinding> : Ba
                 when (it.status) {
                     Status.RUNNING -> showProgress(it.tag ?: "")
                     Status.SUCCESS -> hideProgress(it.tag ?: "")
-                    else -> showError(it.tag ?: "", it.msg ?: getString(it.event))
+                    else -> showError(
+                        it.tag ?: "",
+                        it.msg ?: getString(it.event),
+                        it.code!!,
+                        it.errorBody
+                    )
                 }
             })
 
@@ -69,12 +74,15 @@ abstract class ParentSharedFragment<T : BaseViewModel, E : ViewDataBinding> : Ba
         return dataBinding.root
     }
 
-    open fun locationState(state : LocationState){ }
+    open fun locationState(state: LocationState) {}
 
-    open fun locationUpdate(location : Coordinate){ }
+    open fun locationUpdate(location: Coordinate) {}
 
-    open fun requestStartUpdatingLocation(requestEnableSetting : Boolean? = true) {
-        viewModel.requestStartUpdatingLocation(WeakReference(requireActivity()), requestEnableSetting)
+    open fun requestStartUpdatingLocation(requestEnableSetting: Boolean? = true) {
+        viewModel.requestStartUpdatingLocation(
+            WeakReference(requireActivity()),
+            requestEnableSetting
+        )
     }
 
     open fun requestStopUpdatingLocation() {

@@ -15,7 +15,7 @@ import com.core.dto.login.UserInfoDto
     ],
     version = 1, exportSchema = false
 )
-abstract class PnashrDb : RoomDatabase() {
+abstract class MyTestDb : RoomDatabase() {
 
     abstract fun userInfoDao(): UserInfoDao
 

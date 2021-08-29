@@ -15,9 +15,6 @@ class ConnectivityInterceptor @Inject constructor(
 
     override fun intercept(chain: Interceptor.Chain): Response {
 
-        //oAuth 2
-        // access token
-        // refresh token
 
         if (!isOnline(connectivityManager)) {
             throw NoConnectivityException()
@@ -26,15 +23,9 @@ class ConnectivityInterceptor @Inject constructor(
         val original = chain.request()
 
         val requestBuilder = original.newBuilder()
-            .addHeader("Accept", "application/json")
-            .addHeader("Content-type", "application/json")
-
-        //if code == 404 -> then call refresh token api
-        //x -> 404
-        //        refres call -> 200
-        //        again call x -> 200
-        //        reture x response
-
+           /* .addHeader("Accept", "application/json")
+            .addHeader("Content-type", "application/json")*/
+            .addHeader("x-Api-key", "de196ac120164019a0911ea8191f85e4")
 
 
         return chain.proceed(requestBuilder.build())

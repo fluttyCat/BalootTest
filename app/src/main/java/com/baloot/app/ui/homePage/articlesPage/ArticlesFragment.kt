@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import androidx.paging.map
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.baloot.app.R
 import com.baloot.app.databinding.FragmentArticlesBinding
@@ -17,6 +18,7 @@ import com.baloot.app.ui.homePage.articlesPage.viewModel.ArticleViewModel
 import com.baloot.app.ui.homePage.articlesPage.viewModel.ArticleViewModelImpl
 import com.baloot.app.util.FooterAdapterVertical
 import com.core.base.ParentFragment
+import com.core.dto.article.Article
 import com.core.repository.HomeRepository
 import com.core.repository.LocalRepository
 import kotlinx.coroutines.flow.collectLatest
@@ -35,11 +37,11 @@ class ArticlesFragment : ParentFragment<ArticleViewModel, FragmentArticlesBindin
     private val articlesAdapter: ArticlesAdapter by lazy {
         ArticlesAdapter {
             navigateToDetailFragment(
-                it.title!!,
-                it.description!!,
-                it.publishedAt!!,
-                it.urlToImage!!,
-                it.source!!.name
+                it.title,
+                it.description,
+                it.publishedAt,
+                it.urlToImage,
+                it.source?.name
             )
         }
     }
@@ -63,7 +65,19 @@ class ArticlesFragment : ParentFragment<ArticleViewModel, FragmentArticlesBindin
     private fun subscribeArticleItems() {
         lifecycleScope.launch {
             viewModel.getArticleData().collectLatest { bestPagingData ->
-                articlesAdapter.submitData(bestPagingData)
+                val articleData = bestPagingData.map {
+                    Article(
+                        source = it.source,
+                        author = it.author,
+                        title = it.title,
+                        description = it.description,
+                        urlToImage = it.urlToImage,
+                        publishedAt = it.publishedAt,
+                    )
+                }
+
+                articlesAdapter.submitData(articleData)
+                articlesAdapter.notifyDataSetChanged()
             }
         }
         articlesAdapter.addLoadStateListener {
@@ -93,11 +107,11 @@ class ArticlesFragment : ParentFragment<ArticleViewModel, FragmentArticlesBindin
     }
 
     private fun navigateToDetailFragment(
-        title: String,
-        desc: String,
-        publishedAt: String,
-        imageUrl: String,
-        source: String
+        title: String?,
+        desc: String?,
+        publishedAt: String?,
+        imageUrl: String?,
+        source: String?
     ) {
         val action =
             ArticlesFragmentDirections.actionArticlesFragmentToArticlesDetailFragment(

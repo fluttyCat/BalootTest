@@ -6,7 +6,7 @@
 
         <variable
             name="articleItem"
-            type="com.core.dto.article.ArticleDto" />
+            type="com.core.dto.article.Article" />
     </data>
 
 

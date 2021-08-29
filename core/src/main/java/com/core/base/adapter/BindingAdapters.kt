@@ -25,7 +25,7 @@ class BindingAdapters {
         @JvmStatic
         fun imageUrl(imageView: de.hdodenhof.circleimageview.CircleImageView, imageUrl: String?) {
             Picasso.get()
-                .load("$imageUrl")
+                .load("https://test$imageUrl")
                 .into(imageView)
         }
 

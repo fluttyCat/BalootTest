@@ -49,7 +49,7 @@ class SplashFragment : ParentFragment<SplashViewModel, FragmentSplashBinding>() 
 
     override fun getFactory(): ViewModelProvider.Factory {
         return object : ViewModelProvider.NewInstanceFactory() {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
                 return SplashViewModelImpl(
                     application = requireActivity().application,

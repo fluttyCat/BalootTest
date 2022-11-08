@@ -118,14 +118,11 @@ dependencies {
     /* Live data */
     api deps.livedata
 
-
-
     /*countdown view*/
     api deps.countdownView
 
     /*circular image view*/
     api deps.circularImageView
-
 
     /*view pager 2*/
     api deps.view_pager_2
@@ -133,6 +130,8 @@ dependencies {
     /*view pager indicator*/
     api deps.viewpagerIndicator
 
+    /* one time password*/
+    api deps.totp
 
     implementation "com.google.android.material:material:1.1.0"
     implementation 'com.arasthel:spannedgridlayoutmanager:3.0.2'

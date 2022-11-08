@@ -42,7 +42,7 @@ class MainActivity : ParentActivity<MainViewModel, ActivityMainBinding>() {
 
     override fun getFactory(): ViewModelProvider.Factory {
         return object : ViewModelProvider.NewInstanceFactory() {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
                 return MainViewModelImpl(
                     application = application,

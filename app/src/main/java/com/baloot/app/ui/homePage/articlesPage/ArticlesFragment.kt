@@ -1,6 +1,8 @@
 package com.baloot.app.ui.homePage.articlesPage
 
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Base64
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
@@ -13,6 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.baloot.app.R
 import com.baloot.app.databinding.FragmentArticlesBinding
 import com.baloot.app.di.DaggerAppComponent
+import com.baloot.app.encryption.IEncryption
+import com.baloot.app.encryption.builder.EncryptionBuilder
+import com.baloot.app.encryption.core.enums.Alias
+import com.baloot.app.encryption.core.enums.CipherAlgorithm
+import com.baloot.app.encryption.core.enums.EncryptionMode
+import com.baloot.app.encryption.core.enums.EncryptionPadding
 import com.baloot.app.ui.homePage.adapter.ArticlesAdapter
 import com.baloot.app.ui.homePage.articlesPage.viewModel.ArticleViewModel
 import com.baloot.app.ui.homePage.articlesPage.viewModel.ArticleViewModelImpl
@@ -21,8 +29,12 @@ import com.core.base.ParentFragment
 import com.core.dto.article.Article
 import com.core.repository.HomeRepository
 import com.core.repository.LocalRepository
+import dev.turingcomplete.kotlinonetimepassword.HmacAlgorithm
+import dev.turingcomplete.kotlinonetimepassword.TimeBasedOneTimePasswordConfig
+import dev.turingcomplete.kotlinonetimepassword.TimeBasedOneTimePasswordGenerator
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
@@ -33,6 +45,11 @@ class ArticlesFragment : ParentFragment<ArticleViewModel, FragmentArticlesBindin
 
     @Inject
     lateinit var homeRepository: HomeRepository
+
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
+    private val secret: String = "test_secret"
+
 
     private val articlesAdapter: ArticlesAdapter by lazy {
         ArticlesAdapter {
@@ -46,11 +63,31 @@ class ArticlesFragment : ParentFragment<ArticleViewModel, FragmentArticlesBindin
         }
     }
 
+    private val iEncryptionRSA: IEncryption by lazy {
+        val builder = EncryptionBuilder(alias = Alias.RSA.value, type = CipherAlgorithm.RSA)
+        builder.context = requireContext() //Need Only RSA on below API Lv22.
+        builder.config.blockMode = EncryptionMode.ECB
+        builder.config.encryptionPadding = EncryptionPadding.RSA_PKCS1
+        builder.build()
+    }
+    private val iEncryptionAES: IEncryption by lazy {
+        val builder = EncryptionBuilder(alias = Alias.AES.value, type = CipherAlgorithm.AES)
+        builder.config.blockMode = EncryptionMode.CBC
+        builder.config.encryptionPadding = EncryptionPadding.PKCS7
+        builder.build()
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         initArticleRecycler()
         subscribeArticleItems()
+        generateTOTP()
+        dataBinding.aesBtn.setOnClickListener {
+            encryptAES(plainStr = secret).let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+            }
+        }
 
     }
 
@@ -125,11 +162,91 @@ class ArticlesFragment : ParentFragment<ArticleViewModel, FragmentArticlesBindin
         findNavController().navigate(action)
     }
 
+
+    private fun generateTOTP() {
+        val timeStmp: Long = System.currentTimeMillis() / 1000
+        val config = TimeBasedOneTimePasswordConfig(
+            codeDigits = 6,
+            hmacAlgorithm = HmacAlgorithm.SHA1,
+            timeStep = 30,
+            timeStepUnit = TimeUnit.SECONDS
+        )
+        val timeBasedOneTimePasswordGenerator =
+            TimeBasedOneTimePasswordGenerator(secret.toByteArray(), config)
+        val generatedTotp = timeBasedOneTimePasswordGenerator.generate(timestamp = timeStmp)
+        Toast.makeText(requireContext(), generatedTotp, Toast.LENGTH_LONG).show()
+
+    }
+
+
+    private fun encryptRSA(plainStr: String): String {
+        try {
+            val plainByte = plainStr.toByteArray()
+            val result = iEncryptionRSA.doEncrypt(plainByte = plainByte)
+            return Base64.encodeToString(result.bytes, Base64.DEFAULT)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(requireContext(), e.toString(), Toast.LENGTH_LONG).show()
+        }
+        return ""
+    }
+
+    private fun decryptRSA(encryptedStr: String): String {
+        try {
+            val encryptedByte = Base64.decode(encryptedStr, Base64.DEFAULT)
+            val result = iEncryptionRSA.doDecrypt(encryptedByte = encryptedByte)
+            return String(result.bytes)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(requireContext(), e.toString(), Toast.LENGTH_LONG).show()
+        }
+        return ""
+    }
+
+    private fun encryptAES(plainStr: String): String {
+        try {
+            val plainByte = plainStr.toByteArray()
+            val result = iEncryptionAES.doEncrypt(plainByte = plainByte)
+            cipherIV = result.cipherIV
+            return Base64.encodeToString(result.bytes, Base64.DEFAULT)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(requireContext(), e.toString(), Toast.LENGTH_LONG).show()
+        }
+        return ""
+    }
+
+    private fun decryptAES(encryptedStr: String): String {
+        try {
+            val encryptedByte = Base64.decode(encryptedStr, Base64.DEFAULT)
+            val result =
+                iEncryptionAES.doDecrypt(encryptedByte = encryptedByte, cipherIV = cipherIV)
+            return String(result.bytes)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(requireContext(), e.toString(), Toast.LENGTH_LONG).show()
+        }
+        return ""
+    }
+
+    private var cipherIV: ByteArray?
+        get() {
+            sharedPreferences.getString("cipher_iv", null)?.let {
+                return Base64.decode(it, Base64.DEFAULT)
+            }
+            return null
+        }
+        set(value) {
+            val editor = sharedPreferences.edit()
+            editor.putString("cipher_iv", Base64.encodeToString(value, Base64.DEFAULT))
+            editor.apply()
+        }
+
     override fun getViewModelClass(): Class<ArticleViewModel> = ArticleViewModel::class.java
 
     override fun getFactory(): ViewModelProvider.Factory {
         return object : ViewModelProvider.NewInstanceFactory() {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
                 return ArticleViewModelImpl(
                     application = requireActivity().application,

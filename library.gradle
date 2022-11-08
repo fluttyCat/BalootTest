@@ -51,8 +51,8 @@ ext.deps = [
         legacy               : 'androidx.legacy:legacy-support-v4:1.0.0',
         multi_dex            : "androidx.multidex:multidex:2.0.1",
 
-        nav_fragment         : 'androidx.navigation:navigation-fragment-ktx:2.2.1',
-        nav_ui               : 'androidx.navigation:navigation-ui-ktx:2.2.1',
+        nav_fragment         : 'androidx.navigation:navigation-fragment-ktx:2.5.3',
+        nav_ui               : 'androidx.navigation:navigation-ui-ktx:2.5.3',
 
         gson                 : "com.google.code.gson:gson:2.8.6",
         okhttp               : "com.squareup.okhttp3:okhttp:4.9.1",
@@ -146,10 +146,8 @@ ext.deps = [
         paging_rxjava        : "androidx.paging:paging-rxjava2-ktx:3.1.0-alpha01",
 
         mkloader             : 'com.tuyenmonkey:mkloader:1.4.0',
-
-
-
-        view_pager_2         : "androidx.viewpager2:viewpager2:1.0.0"
+        view_pager_2         : "androidx.viewpager2:viewpager2:1.0.0",
+        totp : "dev.turingcomplete:kotlin-onetimepassword:2.4.0"
 
 ]
 

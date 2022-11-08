@@ -139,6 +139,9 @@ class ArticlesFragment : ParentFragment<ArticleViewModel, FragmentArticlesBindin
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+                else -> {
+
+                }
             }
         }
     }

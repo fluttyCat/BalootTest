@@ -3,6 +3,7 @@ package com.baloot.app.ui.homePage.articlesPage
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
@@ -49,7 +50,7 @@ class ArticlesFragment : ParentFragment<ArticleViewModel, FragmentArticlesBindin
     @Inject
     lateinit var sharedPreferences: SharedPreferences
     private val secret: String = "test_secret"
-
+    private var encryptedStr: String? = null
 
     private val articlesAdapter: ArticlesAdapter by lazy {
         ArticlesAdapter {
@@ -72,6 +73,7 @@ class ArticlesFragment : ParentFragment<ArticleViewModel, FragmentArticlesBindin
     }
     private val iEncryptionAES: IEncryption by lazy {
         val builder = EncryptionBuilder(alias = Alias.AES.value, type = CipherAlgorithm.AES)
+        builder.config.cipherAlgorithm = CipherAlgorithm.AES
         builder.config.blockMode = EncryptionMode.CBC
         builder.config.encryptionPadding = EncryptionPadding.PKCS7
         builder.build()
@@ -85,9 +87,13 @@ class ArticlesFragment : ParentFragment<ArticleViewModel, FragmentArticlesBindin
         generateTOTP()
         dataBinding.aesBtn.setOnClickListener {
             encryptAES(plainStr = secret).let {
-                Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+                encryptedStr = it
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             }
+            val test = encryptedStr?.let { decryptAES(it) }
+            Log.d("TAG", "onActivityCreated: $test")
         }
+
 
     }
 

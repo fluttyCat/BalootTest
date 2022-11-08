@@ -22,7 +22,7 @@ abstract class CoreEncryption(
     init {
         cipher = createCipher()
         keyStore = this.createKeyStore()
-        //keyStore.load(null)
+        keyStore.load(null)
         createKeystoreAliasIfNeeded()
     }
 
@@ -85,9 +85,9 @@ abstract class CoreEncryption(
         InvalidAlgorithmParameterException::class
     )
     private fun createKeyStore(): KeyStore {
-        return KeyStore.getInstance("AndroidKeyStore").apply {
+        return KeyStore.getInstance("AndroidKeyStore")/*.apply {
             load(null)
-        }
+        }*/
     }
 
     /**

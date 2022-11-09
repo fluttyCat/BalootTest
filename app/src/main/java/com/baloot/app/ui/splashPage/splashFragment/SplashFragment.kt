@@ -11,6 +11,7 @@ import com.baloot.app.di.DaggerAppComponent
 import com.baloot.app.ui.homePage.main.MainActivity
 import com.baloot.app.ui.splashPage.splashFragment.viewModel.SplashViewModel
 import com.baloot.app.ui.splashPage.splashFragment.viewModel.SplashViewModelImpl
+import com.baloot.app.util.RootUtil.isDeviceRooted
 import com.core.base.ParentFragment
 import com.core.repository.HomeRepository
 import com.core.repository.LocalRepository
@@ -30,8 +31,9 @@ class SplashFragment : ParentFragment<SplashViewModel, FragmentSplashBinding>() 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        navigateToHomeActivity()
-
+        if (!isDeviceRooted){
+            navigateToHomeActivity()
+        }
     }
 
     private fun navigateToHomeActivity() {

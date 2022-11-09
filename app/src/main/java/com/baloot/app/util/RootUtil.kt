@@ -1,9 +1,14 @@
 package com.baloot.app.util
 
+import android.content.Context
 import android.os.Build
+import android.os.UserManager
+import android.provider.Settings
+import androidx.annotation.RequiresApi
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
+
 
 object RootUtil {
     val isDeviceRooted: Boolean
@@ -45,4 +50,21 @@ object RootUtil {
             process?.destroy()
         }
     }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun isDevelopmentSettingsEnabled(context: Context): Boolean {
+        val um = context.getSystemService(Context.USER_SERVICE) as UserManager
+        val settingEnabled = Settings.Global.getInt(
+            context.contentResolver,
+            Settings.Global.DEVELOPMENT_SETTINGS_ENABLED,
+            if (Build.TYPE == "eng") 1 else 0
+        ) !== 0
+        val hasRestriction = um.hasUserRestriction(
+            UserManager.DISALLOW_DEBUGGING_FEATURES
+        )
+        val isAdmin: Boolean = um.isSystemUser
+        return isAdmin && !hasRestriction && settingEnabled
+    }
 }
+
+

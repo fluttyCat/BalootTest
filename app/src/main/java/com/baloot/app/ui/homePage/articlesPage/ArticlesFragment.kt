@@ -1,11 +1,15 @@
 package com.baloot.app.ui.homePage.articlesPage
 
+import android.app.AlertDialog
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -26,6 +30,7 @@ import com.baloot.app.ui.homePage.adapter.ArticlesAdapter
 import com.baloot.app.ui.homePage.articlesPage.viewModel.ArticleViewModel
 import com.baloot.app.ui.homePage.articlesPage.viewModel.ArticleViewModelImpl
 import com.baloot.app.util.FooterAdapterVertical
+import com.baloot.app.util.RootUtil.isDevelopmentSettingsEnabled
 import com.core.base.ParentFragment
 import com.core.dto.article.Article
 import com.core.repository.HomeRepository
@@ -39,7 +44,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 
-class ArticlesFragment : ParentFragment<ArticleViewModel, FragmentArticlesBinding>() {
+class ArticlesFragment : ParentFragment<ArticleViewModel, FragmentArticlesBinding>(),
+    View.OnClickListener {
 
     @Inject
     lateinit var localRepository: LocalRepository
@@ -79,21 +85,17 @@ class ArticlesFragment : ParentFragment<ArticleViewModel, FragmentArticlesBindin
         builder.build()
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         initArticleRecycler()
         subscribeArticleItems()
         generateTOTP()
-        dataBinding.aesBtn.setOnClickListener {
-            encryptAES(plainStr = secret).let {
-                encryptedStr = it
-                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-            }
-            val test = encryptedStr?.let { decryptAES(it) }
-            Log.d("TAG", "onActivityCreated: $test")
+        if (isDevelopmentSettingsEnabled(requireContext())) {
+            testDeveloperOption()
+            //Settings.Global.putString(requireActivity().contentResolver, Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, "0")
         }
-
 
     }
 
@@ -251,6 +253,27 @@ class ArticlesFragment : ParentFragment<ArticleViewModel, FragmentArticlesBindin
             editor.apply()
         }
 
+    private fun testEncryptAndDecrypt() {
+        encryptAES(plainStr = secret).let {
+            encryptedStr = it
+            Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+        }
+        val test = encryptedStr?.let { decryptAES(it) }
+        Log.d("TAG", "onActivityCreated: $test")
+    }
+
+    private fun testDeveloperOption() {
+        val view = layoutInflater.inflate(R.layout.dialog_developer_option_layout, null)
+        val developerOptionAD = AlertDialog.Builder(requireContext())
+            .setCancelable(false)
+            .create()
+        developerOptionAD.setView(view)
+        val window = developerOptionAD.window
+        window?.setBackgroundDrawableResource(android.R.color.transparent)
+        window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+        developerOptionAD.show()
+    }
+
     override fun getViewModelClass(): Class<ArticleViewModel> = ArticleViewModel::class.java
 
     override fun getFactory(): ViewModelProvider.Factory {
@@ -275,5 +298,10 @@ class ArticlesFragment : ParentFragment<ArticleViewModel, FragmentArticlesBindin
             .inject(this)
     }
 
+    override fun onClick(v: View?) {
+        when (v) {
+            dataBinding.aesBtn -> testEncryptAndDecrypt()
+        }
+    }
 
 }

@@ -26,12 +26,12 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/devOptionTv"
+                    android:id="@+id/debugModeTv"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/dark_blue"
                     android:gravity="start"
-                    android:text="@string/developer_option"
+                    android:text="@string/debug_mode"
                     android:padding="16dp"
                     android:textColor="#7d97ab"
                     android:textSize="14sp" />
